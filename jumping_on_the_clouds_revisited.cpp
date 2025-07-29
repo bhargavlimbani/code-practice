@@ -1,0 +1,79 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+vector<string> split_string(string);
+
+// Complete the jumpingOnClouds function below.
+int jumpingOnClouds(vector<int> c, int k) {
+    int energy = 100;
+    int n = c.size();
+    int i = 0;
+
+    do {
+        i = (i + k) % n;
+        energy -= 1;
+        if (c[i] == 1) {
+            energy -= 2;
+        }
+    } while (i != 0);
+
+    return energy;
+}
+
+int main()
+{
+    ofstream fout(getenv("OUTPUT_PATH"));
+
+    string nk_temp;
+    getline(cin, nk_temp);
+
+    vector<string> nk = split_string(nk_temp);
+
+    int n = stoi(nk[0]);
+    int k = stoi(nk[1]);
+
+    string c_temp_temp;
+    getline(cin, c_temp_temp);
+
+    vector<string> c_temp = split_string(c_temp_temp);
+
+    vector<int> c(n);
+    for (int i = 0; i < n; i++) {
+        c[i] = stoi(c_temp[i]);
+    }
+
+    int result = jumpingOnClouds(c, k);
+    fout << result << "\n";
+
+    fout.close();
+    return 0;
+}
+
+vector<string> split_string(string input_string) {
+    string::iterator new_end = unique(input_string.begin(), input_string.end(),
+        [] (const char &x, const char &y) {
+            return x == y && x == ' ';
+        });
+
+    input_string.erase(new_end, input_string.end());
+
+    while (input_string.back() == ' ') {
+        input_string.pop_back();
+    }
+
+    vector<string> splits;
+    char delimiter = ' ';
+
+    size_t i = 0;
+    size_t pos = input_string.find(delimiter);
+
+    while (pos != string::npos) {
+        splits.push_back(input_string.substr(i, pos - i));
+        i = pos + 1;
+        pos = input_string.find(delimiter, i);
+    }
+
+    splits.push_back(input_string.substr(i));
+    return splits;
+}
